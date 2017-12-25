@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geocoding service</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="submit">hey</button>
+    
+    <div id="map"></div>
+    <script>
+
+$("#submit").on("click", function(event){
+  event.preventDefault();
+
+// constructing a queryURL variable we will use instead of the literal string inside of the ajax method
+  var startDates = $("#startDate").val();
+  var endDates = $("#endDate").val();
+  var time = "T00:00:00Z";
+  var title = "Ticket Master";
+  var genre = $("#genre").val();
+  var startDate = startDates.concat(time);
+  var endDate = endDates.concat(time);
+  var size= parseInt($("#size").val());
+  var apiKey="qq8XdJrLt8geS8g2CUjbY9sqKk8crlQw";
+  var queryURL = "https:app.ticketmaster.com/discovery/v2/events.json?countryCode=US&city=Chicago&classificationName=music&classificationName="+genre+"&startDateTime="+startDate+"&endDateTime="+endDate+"&size="+size+"&apikey="+apiKey;
+
+  var myShows = {
+    "shows": []
+  };
+
+  //the ajax call
+  $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).done(function(response) {
+        var events = response._embedded.events;
+      myShows = {
+        "shows": []
+    };
+
+      for(var i=0;i<events.length;i++){
+        var aShow ={
+          "name": events[i].name,
+          "date": events[i].dates.start.localDate,
+          "venue": events[i]._embedded.venues[0].name,
+         } ;
+        myShows.shows.push(aShow);
+
+      };
+
+      //or we can find all venues in chicago that ticket master will find and get the lat long for them - might be the easier way.
+        var mylat = 41.8781;
+        var mylong = -87.6298;
+
+      function initMap() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: {lat:mylat, lng:mylong }
+          //{lat:mylat , lng:mylong }
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+      }
+
+      function geocodeAddress(geocoder, resultsMap) {
+        
+        //this is important in changing the location
+        var address = "austin";
+
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7ydrZE1U4_y3TjyeaO2aVyfWzxUnxKuk&callback=initMap">
+    </script>
+  </body>
+</html>
