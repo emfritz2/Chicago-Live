@@ -1,8 +1,8 @@
 var config = {
-    apiKey: "AIzaSyC_iCNRw1-_EefEtmgoyiHN5XdB3UGisvA",
-    authDomain: "brew-database-97a1f.firebaseapp.com",
-    databaseURL: "https://brew-database-97a1f.firebaseio.com",
-    storageBucket: "brew-database-97a1f.appspot.com",
+    apiKey: "AIzaSyD42EA8h6FCBGAI9sCkjab6YGozIUJ_jcQ",
+    authDomain: "chicago-l-d6ecf.firebaseapp.com",
+    databaseURL: "https://chicago-l-d6ecf.firebaseio.com",
+    storageBucket: "chicago-l-d6ecf.appspot.com",
   };
 
 
